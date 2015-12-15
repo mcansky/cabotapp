@@ -6,7 +6,7 @@ cabot-app:
     - cabot-celery
   env_file: envs/cabot.env
   ports:
-    - "5000:5000"
+    - "8000:8000"
   command: gunicorn cabot.wsgi:application --config gunicorn.conf --log-level debug
 
 cabot-celery:

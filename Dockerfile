@@ -23,8 +23,8 @@ ENV DJANGO_SETTINGS_MODULE cabot.settings
 RUN django-admin.py collectstatic --noinput && django-admin.py compress --force 
 
 # PORT
-ENV PORT 5000
-EXPOSE 5000
+ENV PORT 8000
+EXPOSE 8000
 
 WORKDIR /home/cabot/src
 ADD gunicorn.conf gunicorn.conf
