@@ -1,3 +1,6 @@
+cabot-build:
+  build: .
+
 cabot-app:
   build: .
   links:
