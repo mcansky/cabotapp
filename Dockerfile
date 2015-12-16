@@ -12,6 +12,7 @@ ADD . /home/cabot/src/
 # Install dependencies
 RUN pip install -e /home/cabot/src/
 RUN npm install --no-color -g coffee-script less@1.3 --registry http://registry.npmjs.org/ && ln -s /usr/bin/nodejs /usr/bin/node
+RUN apt-get remove --auto-remove -y build-essential
 
 # Set env var
 ENV PYTHONPATH $PYTHONPATH:/home/cabot/src/
