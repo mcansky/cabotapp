@@ -26,7 +26,8 @@ dependencies:
 
 test:
     override:
-        - docker-compose -p ${DOCKER_COMPOSE_PREFIX} build cabot-build
+        - touch /home/ubuntu/cabotapp/envs/cabot.env
+        - docker-compose -p ${DOCKER_COMPOSE_PREFIX} build cabot-app
         - echo "Done"
 
 deployment:
