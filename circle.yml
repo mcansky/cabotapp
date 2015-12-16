@@ -34,7 +34,7 @@ deployment:
     hub:
         branch: master
         commands:
-            - docker tag ${DOCKER_COMPOSE_PREFIX}_mcansky-cabot mcansky/cabot:${CIRCLE_SHA1}
-            - docker tag ${DOCKER_COMPOSE_PREFIX}_mcansky-cabot mcansky/cabot:latest
+            - docker tag ${DOCKER_COMPOSE_PREFIX}_cabot-app mcansky/cabot:${CIRCLE_SHA1}
+            - docker tag ${DOCKER_COMPOSE_PREFIX}_cabot-app mcansky/cabot:latest
             - docker push mcansky/cabot:${CIRCLE_SHA1}
             - docker push mcansky/cabot:latest
