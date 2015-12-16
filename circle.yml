@@ -26,7 +26,7 @@ dependencies:
 
 test:
     override:
-        - docker-compose -p ${DOCKER_COMPOSE_PREFIX} build cabot-app
+        - docker build .
         - echo "Done"
 
 deployment:
