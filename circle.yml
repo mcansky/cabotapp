@@ -1,0 +1,39 @@
+general:
+    branches:
+        only:
+        - master
+        - /pull\/.*/
+
+machine:
+    pre:
+      - sudo bash -c "curl -L https://github.com/docker/compose/releases/download/1.5.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose"
+    services:
+      - docker
+
+    python:
+        version: 2.7.10
+    node:
+        version: 0.10.28
+    environment:
+        DOCKER_COMPOSE_PREFIX: circleci
+
+dependencies:
+    cache_directories:
+        - ~/docker
+
+    override:
+        - docker login --email=$DOCKER_HUB_EMAIL --username=$DOCKER_HUB_USERNAME --password=$DOCKER_HUB_PASSWORD
+
+test:
+    override:
+        - docker-compose -p ${DOCKER_COMPOSE_PREFIX} build cabot-app
+        - echo "Done"
+
+deployment:
+    hub:
+        branch: master
+        commands:
+            - docker tag ${DOCKER_COMPOSE_PREFIX}_mcansky-cabot mcansky/cabot:${CIRCLE_SHA1}
+            - docker tag ${DOCKER_COMPOSE_PREFIX}_mcansky-cabot mcansky/cabot:latest
+            - docker push mcansky/cabot:${CIRCLE_SHA1}
+            - docker push mcansky/cabot:latest
