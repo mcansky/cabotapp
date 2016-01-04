@@ -3,28 +3,23 @@ cabot-app:
   links:
     - cabot-db
     - cabot-celerybroker
-    - cabot-celery
-  env_file: envs/cabot.env
   ports:
     - "8000:8000"
-  command: gunicorn cabot.wsgi:application --config gunicorn.conf --log-level debug
+  command: bin/web
 
 cabot-celery:
   build: .
   links:
     - cabot-db
     - cabot-celerybroker
-    - cabot-beat
-  env_file: envs/cabot.env
-  command: celery worker -A cabot --loglevel=INFO --concurrency=16 -Ofair
+  command: bin/celery-worker
 
 cabot-beat:
   build: .
   links:
     - cabot-db
     - cabot-celerybroker
-  env_file: envs/cabot.env
-  command: celery beat -A cabot --loglevel=INFO
+  command: bin/celery-beat
 
 cabot-db:
   image: postgres:9.4
@@ -34,4 +29,3 @@ cabot-db:
 
 cabot-celerybroker:
   image: redis:2.8
-
