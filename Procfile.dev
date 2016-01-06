@@ -1,2 +1,0 @@
-web:       python manage.py runserver 0.0.0.0:$PORT
-celery:    celery -A cabot worker --loglevel=DEBUG -B -c 8 -Ofair

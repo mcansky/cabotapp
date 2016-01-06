@@ -1,9 +1,12 @@
 import os
-import dj_database_url
 import re
+
+import dj_database_url
+
 from django.conf import settings
-from cabot.celeryconfig import *
-from cabot.cabot_config import *
+
+from cabot.celeryconfig import *  # NOQA
+from cabot.cabot_config import *  # NOQA
 
 settings_dir = os.path.dirname(__file__)
 PROJECT_ROOT = os.path.abspath(settings_dir)
@@ -81,8 +84,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = os.environ.get(
-    'DJANGO_SECRET_KEY', '2FL6ORhHwr5eX34pP9mMugnIOd3jzVuT45f7w430Mt5PnEwbcJgma0q8zUXNZ68A')
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY') or 'dontusethis'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -91,6 +93,7 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'django.middleware.http.ConditionalGetMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -169,54 +172,31 @@ LOGGING = {
         'verbose': {
             'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
         },
-        'simple': {
-            'format': '%(levelname)s %(message)s'
-        },
     },
     'handlers': {
-        'null': {
-            'level': 'DEBUG',
-            'class': 'django.utils.log.NullHandler',
-        },
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'verbose'
         },
-        'log_file': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'formatter': 'verbose',
-            'filename': os.environ['LOG_FILE'],
-            'maxBytes': 1024 * 1024 * 25,  # 25 MB
-            'backupCount': 5,
-        },
-        'mail_admins': {
-            'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
     },
     'loggers': {
         'django': {
-            'handlers': ['console', 'log_file', 'mail_admins'],
-            'level': 'INFO',
             'propagate': True,
+            'level': 'INFO',
         },
         'django.request': {
-            'handlers': ['console', 'log_file', 'mail_admins'],
+            'propagate': True,
             'level': 'ERROR',
-            'propagate': False,
         },
         'django.db.backends': {
-            'handlers': ['console', 'log_file', 'mail_admins'],
+            'propagate': True,
             'level': 'INFO',
-            'propagate': False,
         },
         # Catch All Logger -- Captures any other logging
         '': {
-            'handlers': ['console', 'log_file', 'mail_admins'],
+            'handlers': ['console'],
             'level': 'INFO',
-            'propagate': True,
         }
     }
 }
@@ -241,5 +221,5 @@ AUTHENTICATION_BACKENDS = (
 AUTH_LDAP = os.environ.get('AUTH_LDAP', 'false')
 
 if AUTH_LDAP.lower() == "true":
-    from settings_ldap import *
+    from settings_ldap import *  # NOQA
     AUTHENTICATION_BACKENDS += tuple(['django_auth_ldap.backend.LDAPBackend'])

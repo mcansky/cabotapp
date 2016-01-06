@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec celery beat -A cabot --loglevel=INFO
